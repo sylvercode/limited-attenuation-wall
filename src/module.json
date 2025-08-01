@@ -38,7 +38,7 @@
     }
   ],
   "styles": [
-    "style.css"
+    "styles/module.css"
   ],
   "esmodules": [
     "scripts/module.js"
