@@ -17,7 +17,7 @@ export default class DogBrowser extends
       height: 720
     },
     actions: {
-      randomizeDog: this.randomizeDog
+      randomizeDog: DogBrowser.randomizeDog
     }
   }
 
@@ -53,4 +53,3 @@ export default class DogBrowser extends
     this.render();
   }
 }
-

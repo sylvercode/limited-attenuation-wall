@@ -31,8 +31,9 @@ export default defineConfig({
     }),
     copy({
       targets: [
-        { src: "dist/scripts/assets/*.css", dest: "dist/styles/", rename: "style.css" },
-      ]
+        { src: "dist/scripts/assets/*.css", dest: "dist/styles/", rename: "module.css" },
+      ],
+      hook: "writeBundle",
     }),
   ],
 });
