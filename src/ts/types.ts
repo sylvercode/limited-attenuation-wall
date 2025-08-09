@@ -1,5 +1,6 @@
 import DogBrowser from "./apps/dogBrowser";
 
-export interface MyModule extends foundry.packages.Module {
+export interface SylvercodeEnhanceLimitedWallModule extends foundry.packages.Module {
   dogBrowser: DogBrowser;
 }
+

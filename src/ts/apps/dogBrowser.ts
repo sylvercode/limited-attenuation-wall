@@ -7,7 +7,7 @@ export default class DogBrowser extends
   imageUrl?: string;
 
   override get title(): string {
-    return getGame().i18n?.localize("MYMODULE.dog-browser") ?? "Dog Browser";
+    return getGame().i18n?.localize("SYLVERCODE-ENHANCE-LIMITED-WALL.dog-browser") ?? "Dog Browser";
   }
 
   static override DEFAULT_OPTIONS = {
@@ -53,3 +53,4 @@ export default class DogBrowser extends
     this.render();
   }
 }
+

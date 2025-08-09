@@ -1,7 +1,7 @@
 {
-  "name": "foundry-module-ts",
+  "name": "sylvercode-enhance-limited-wall",
   "version": "1.0.0",
-  "description": "A template project for FoundryVTT modules using Typescript",
+  "description": "Enhance limited wall vision of Foundry VTT.",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -16,3 +16,4 @@
     "vite": "^7.0.4"
   }
 }
+
