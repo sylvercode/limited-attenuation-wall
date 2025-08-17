@@ -2,6 +2,11 @@
   "compilerOptions": {
     "types": [
       "fvtt-types",
+      "fvtt-libwrapper/fvtt-libWrapper"
+    ],
+    "typeRoots": [
+      "node_modules",
+      "libs"
     ],
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -25,6 +30,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "src",
+    "libs"
   ]
 }
