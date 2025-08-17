@@ -18,6 +18,8 @@ export default defineConfig({
         entryFileNames: "module.js",
         format: "es",
       },
+      // Added external dependency to avoid bundling libWrapper
+      external: ["fvtt-libwrapper/fvtt-libWrapper"],
     },
   },
   plugins: [
