@@ -28,19 +28,45 @@ export interface LibWrapperIgnoreConflictOptions {
   ignore_errors?: boolean;
 }
 
-/** Function signature for LISTENER & OVERRIDE wrappers (no wrapped param). */
-export type LibWrapperBareWrapperFn = (...args: any[]) => any;
+export type LibWrapperBaseCallbackArgs = any[];
+export type LibWrapperBaseCallback = (...args: LibWrapperBaseCallbackArgs) => any;
+
 /** Function signature for WRAPPER & MIXED (first param is next function). */
-export type LibWrapperChainedWrapperFn = (wrapped: (...args: any[]) => any, ...args: any[]) => any;
+export type LibWrapperChainedWrapperFn = (wrapped: LibWrapperBaseCallback, ...args: LibWrapperBaseCallbackArgs) => any;
 /** Union of any accepted wrapper function signatures. */
-export type LibWrapperAnyWrapperFn = LibWrapperBareWrapperFn | LibWrapperChainedWrapperFn;
+export type LibWrapperAnyWrapperFn = LibWrapperBaseCallback | LibWrapperChainedWrapperFn;
+
+export type LibWrapperWrapperTarget = string | number;
+
+export type LibWrapperChainedWrapperDefinition = {
+  target: LibWrapperWrapperTarget,
+  fn: LibWrapperChainedWrapperFn,
+  type?: Exclude<LibWrapperWrapperType, 'LISTENER' | 'OVERRIDE'> | number,
+}
+
+export type LibWrapperBareWrapperDefinition = {
+  target: LibWrapperWrapperTarget,
+  fn: LibWrapperBaseCallback,
+  type: 'LISTENER' | 'OVERRIDE' | number,
+}
+
+export type LibWrapperAnyWrapperDefinition = {
+  target: LibWrapperWrapperTarget,
+  fn: LibWrapperAnyWrapperFn,
+  type?: LibWrapperWrapperType | number,
+}
+
+export type LibWrapperWrapperDefinitions =
+  LibWrapperChainedWrapperDefinition |
+  LibWrapperBareWrapperDefinition |
+  LibWrapperAnyWrapperDefinition;
 
 /** Base error class (available as libWrapper.Error & libWrapper.LibWrapperError). */
 export class LibWrapperError extends Error { package_id?: string; }
-export class LibWrapperInternalError extends LibWrapperError {}
-export class LibWrapperPackageError extends LibWrapperError {}
+export class LibWrapperInternalError extends LibWrapperError { }
+export class LibWrapperPackageError extends LibWrapperError { }
 export class LibWrapperAlreadyOverriddenError extends LibWrapperError { conflicting_id?: string; target?: string; }
-export class LibWrapperInvalidWrapperChainError extends LibWrapperError {}
+export class LibWrapperInvalidWrapperChainError extends LibWrapperError { }
 
 export declare class LibWrapper {
   // -------- Enumerations / constants --------
@@ -75,21 +101,21 @@ export declare class LibWrapper {
   /** Register a new wrapper. Returns unique numeric target identifier. */
   static register(
     package_id: string,
-    target: string | number,
+    target: LibWrapperWrapperTarget,
     fn: LibWrapperChainedWrapperFn,
-    type?: Exclude<LibWrapperWrapperType, 'LISTENER' | 'OVERRIDE'> | number,
+    type?: LibWrapperChainedWrapperDefinition.type,
     options?: LibWrapperRegisterOptions
   ): number;
   static register(
     package_id: string,
-    target: string | number,
-    fn: LibWrapperBareWrapperFn,
-    type: 'LISTENER' | 'OVERRIDE' | number,
+    target: LibWrapperWrapperTarget,
+    fn: LibWrapperBaseCallback,
+    type: LibWrapperBareWrapperDefinition.type,
     options?: LibWrapperRegisterOptions
   ): number;
   static register(
     package_id: string,
-    target: string | number,
+    target: LibWrapperWrapperTarget,
     fn: LibWrapperAnyWrapperFn,
     type?: LibWrapperWrapperType | number,
     options?: LibWrapperRegisterOptions
@@ -116,4 +142,4 @@ declare global {
   var libWrapper: typeof LibWrapper | undefined;
 }
 
-export {}; // Treat file as a module and retain global augmentation.
+export { }; // Treat file as a module and retain global augmentation.
