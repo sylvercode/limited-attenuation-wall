@@ -1,0 +1,3 @@
+[submodule "libs/fvtt-lib-wrapper-types"]
+	path = libs/fvtt-lib-wrapper-types
+	url = git@github.com:sylvercode/fvtt-lib-wrapper-types.git
