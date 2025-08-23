@@ -22,7 +22,7 @@
     "canUpload": true
   },
   "relationships": {
-    "recommends": [
+    "requires": [
       {
         "id": "lib-wrapper",
         "type": "module",
