@@ -1,4 +1,4 @@
-import ClockwiseSweepPolygonPatch from "./clockwise_sweep_polygon_patch";
+import ClockwiseSweepPolygonPatch from "./apps/clockwise_sweep_polygon_patch";
 import * as dogBrowserApp from "./apps/dog_browser";
 import type { LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
 import { HookDefinitions } from "fvtt-hook-attacher";
