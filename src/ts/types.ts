@@ -11,7 +11,7 @@ export interface SylvercodeEnhanceLimitedWallModule
 export type OnInitModuleFunc = (module: SylvercodeEnhanceLimitedWallModule) => void;
 
 export class SylvercodeEnhanceLimitedWallModuleHooks {
-  static onInitModuleCallbacks: Iterable<OnInitModuleFunc> = [
+  static ON_INIT_MODULE_CALLBACKS: Iterable<OnInitModuleFunc> = [
     dogBrowserApp.onInitHandle,
   ];
 
