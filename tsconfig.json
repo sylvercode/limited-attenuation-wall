@@ -1,8 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "fvtt-lib-wrapper-types": [
+        "libs/fvtt-lib-wrapper-types/index"
+      ],
+      "fvtt-hook-attacher": [
+        "libs/fvtt-hook-attacher/index"
+      ],
+    },
     "types": [
-      "fvtt-types",
-      "fvtt-libwrapper/fvtt-libWrapper"
+      "fvtt-types"
     ],
     "typeRoots": [
       "node_modules",

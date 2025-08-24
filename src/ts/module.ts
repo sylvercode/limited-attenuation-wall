@@ -1,31 +1,28 @@
 // Do not remove this import. If you do Vite will think your styles are dead
 // code and not include them in the build output.
 import "../styles/module.scss";
-import DogBrowser from "./apps/dogBrowser";
-import { moduleId, getGame } from "./constants";
-import { SylvercodeEnhanceLimitedWallModule } from "./types";
+import { MODULE_ID } from "./constants";
+import { SylvercodeEnhanceLimitedWallModule as Module, SylvercodeEnhanceLimitedWallModuleHooks as ModuleHooks } from "./types";
+import { HooksAttacher } from "fvtt-hook-attacher";
 
-let module: SylvercodeEnhanceLimitedWallModule;
+let module: Module;
 
 Hooks.once("init", () => {
-  console.log(`Initializing ${moduleId}`);
+  console.log(`Initializing ${MODULE_ID}`);
 
-  module = getGame().modules.get(moduleId) as SylvercodeEnhanceLimitedWallModule;
-  module.dogBrowser = new DogBrowser();
+  module = game?.modules?.get(MODULE_ID) as Module;
+  for (const callback of ModuleHooks.ON_INIT_MODULE_CALLBACKS) {
+    callback(module);
+  }
+
+  if (!libWrapper) {
+    console.warn("LibWrapper not found. Some features may not work as expected.");
+    return;
+  }
+
+  for (const patch of ModuleHooks.LIBWRAPPER_PATCHS) {
+    libWrapper.register(MODULE_ID, patch.target, patch.fn, patch.type, patch.options);
+  }
 });
 
-Hooks.on("renderActorDirectory", (_: ActorDirectory, html: HTMLElement) => {
-  const actionButtons = html.querySelector(".directory-header .action-buttons");
-  if (!actionButtons) throw new Error("Could not find action buttons in Actor Directory");
-
-  const button = document.createElement("button");
-  button.className = "cc-sidebar-button";
-  button.type = "button";
-  button.textContent = "🐶";
-  button.addEventListener("click", () => {
-    module.dogBrowser.render({ force: true });
-  });
-
-  actionButtons.appendChild(button);
-});
-
+HooksAttacher.attachHooks(ModuleHooks.HOOKS_DEFINITIONS_SET);
