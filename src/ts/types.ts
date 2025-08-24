@@ -19,7 +19,7 @@ export class SylvercodeEnhanceLimitedWallModuleHooks {
     ClockwiseSweepPolygonPatch.LIBWRAPPER_PATCHS,
   );
 
-  static HOOKS_DEFINITIONS: HookDefinitions = {
-    ...dogBrowserApp.HOOKS_DEFINITIONS,
-  }
+  static HOOKS_DEFINITIONS_SET: HookDefinitions[] = [
+    dogBrowserApp.HOOKS_DEFINITIONS,
+  ]
 }
