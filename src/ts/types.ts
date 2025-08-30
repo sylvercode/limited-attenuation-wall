@@ -3,6 +3,7 @@ import * as dogBrowserApp from "./apps/dog_browser";
 import type { LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
 import { HookDefinitions } from "fvtt-hook-attacher";
 import * as RenderWallConfigPatchApp from "./apps/render_wall_config_patch";
+import { LimitedAttenuationWallFlagsDataModel } from "./apps/limited_attenuation_wall_flags_data_model";
 
 
 export interface SylvercodeEnhanceLimitedWallModule
@@ -17,12 +18,13 @@ export class SylvercodeEnhanceLimitedWallModuleHooks {
     dogBrowserApp.onInitHandle,
   ];
 
-  static LIBWRAPPER_PATCHS: Iterable<LibWrapperWrapperDefinitions> = Array.from(
-    ClockwiseSweepPolygonPatch.LIBWRAPPER_PATCHS,
-  );
+  static LIBWRAPPER_PATCHS: Iterable<LibWrapperWrapperDefinitions> = [
+    ...ClockwiseSweepPolygonPatch.LIBWRAPPER_PATCHS,
+  ];
 
   static HOOKS_DEFINITIONS_SET: HookDefinitions[] = [
     dogBrowserApp.HOOKS_DEFINITIONS,
-    RenderWallConfigPatchApp.HOOKS_DEFINITIONS,
+    ...LimitedAttenuationWallFlagsDataModel.HOOKS_DEFINITIONS,
+    ...RenderWallConfigPatchApp.HOOKS_DEFINITIONS,
   ]
 }
