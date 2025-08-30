@@ -1,7 +1,18 @@
 {
-  "SYLVERCODE-ENHANCE-LIMITED-WALL.dog-browser": "Dog browser",
-  "SYLVERCODE-ENHANCE-LIMITED-WALL.dogs": "Dogs",
-  "SYLVERCODE-ENHANCE-LIMITED-WALL.fetch-random-dog": "Fetch random dog photo",
-  "SYLVERCODE-ENHANCE-LIMITED-WALL.random-dog-alt": "Image of a random dog"
+  "SYLVERCODE-ENHANCE-LIMITED-WALL": {
+    "dog-browser": "Dog browser",
+    "dogs": "Dogs",
+    "fetch-random-dog": "Fetch random dog photo",
+    "random-dog-alt": "Image of a random dog",
+    "LimitedAttenuationWallFlags": {
+      "FIELDS": {
+        "hasLimitedAttenuation": {
+          "label": "Has Limited Attenuation"
+        },
+        "limitedAttenuationRatio": {
+          "label": "Limited Attenuation Ratio"
+        }
+      }
+    }
+  }
 }
-
