@@ -2,8 +2,7 @@ import { HookDefinitions } from "fvtt-hook-attacher";
 import ApplicationV2 from "node_modules/fvtt-types/src/foundry/client/applications/api/application.mjs";
 import { MODULE_ID } from "../constants";
 import { DataField } from "node_modules/fvtt-types/src/foundry/common/data/fields.mjs";
-import { LimitedAttenuationWallFlags, LimitedAttenuationWallFlagsDataModel } from "./limited_attenuation_wall_flags_data_model";
-
+import { LimitedAttenuationWallFlags, LimitedAttenuationWallFlagsDataModel, LIMITED_ATTENUATION_WALL_FLAG_NAMES } from "./limited_attenuation_wall_flags_data_model";
 
 export const HOOKS_DEFINITIONS: Iterable<HookDefinitions> = [{
     on: [{
@@ -19,7 +18,10 @@ async function renderWallConfig(
     _options: ApplicationV2.RenderOptionsOf<WallConfig>) {
 
     const dataModel = new LimitedAttenuationWallFlagsDataModel(context.document);
-    const fieldsNames: (keyof LimitedAttenuationWallFlags)[] = ["hasLimitedAttenuation", "limitedAttenuationRatio"];
+    const fieldsNames: (keyof LimitedAttenuationWallFlags)[] = [
+        LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation,
+        LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio
+    ];
     const fields = fieldsNames.map(fieldName => {
         const field = dataModel.schema.fields[fieldName] as DataField<any, any>;
         return field.toFormGroup(

@@ -2,9 +2,17 @@ import { HookDefinitions } from "fvtt-hook-attacher";
 import { MODULE_ID, UPPER_MODULE_ID } from "../constants";
 import { BooleanField, DataSchema, NumberField } from "node_modules/fvtt-types/src/foundry/common/data/fields.mjs";
 
+
+class LimitedAttenuationWallFlagNames {
+    readonly hasLimitedAttenuation = "hasLimitedAttenuation" as const;
+    readonly limitedAttenuationRatio = "limitedAttenuationRatio" as const;
+}
+
+export const LIMITED_ATTENUATION_WALL_FLAG_NAMES = new LimitedAttenuationWallFlagNames();
+
 export interface LimitedAttenuationWallFlags {
-    hasLimitedAttenuation: boolean
-    limitedAttenuationRatio: number
+    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation]: boolean
+    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: number
 };
 
 declare module "fvtt-types/configuration" {
@@ -16,8 +24,8 @@ declare module "fvtt-types/configuration" {
 }
 
 interface LimitedAttenuationFlagsSchema extends DataSchema {
-    hasLimitedAttenuation: BooleanField,
-    limitedAttenuationRatio: NumberField
+    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation]: BooleanField,
+    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: NumberField
 }
 
 export class LimitedAttenuationWallFlagsDataModel extends foundry.abstract.DataModel<LimitedAttenuationFlagsSchema> {
@@ -36,19 +44,19 @@ export class LimitedAttenuationWallFlagsDataModel extends foundry.abstract.DataM
     }
 
     constructor(wallDocument: WallDocument) {
-        super(wallDocument.flags["sylvercode-enhance-limited-wall"]);
+        super(wallDocument.flags[MODULE_ID]);
         this.schema.name = MODULE_ID;
         this.schema.parent = wallDocument.schema.fields.flags;
     }
 
     static override defineSchema() {
         return {
-            hasLimitedAttenuation: new foundry.data.fields.BooleanField(
+            [LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation]: new foundry.data.fields.BooleanField(
                 { initial: false },
-                { name: "hasLimitedAttenuation" }),
-            limitedAttenuationRatio: new foundry.data.fields.NumberField(
-                { initial: 0.5, min: 0, max: 1, step: 0.1 },
-                { name: "limitedAttenuationRatio" })
+                { name: LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation }),
+            [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: new foundry.data.fields.NumberField(
+                { initial: 0.5, min: 0.1, max: 1, step: 0.1 },
+                { name: LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio })
         }
     }
 }
