@@ -1,4 +1,5 @@
 import type { LibWrapperBaseCallback, LibWrapperBaseCallbackArgs, LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
+import { LimitedAttenuationWallFlagsDataModel } from "./limited_attenuation_wall_flags_data_model";
 
 
 export default class ClockwiseSweepPolygonPatch {
@@ -28,6 +29,10 @@ export default class ClockwiseSweepPolygonPatch {
     static _identifyEdges(this: ClockwiseSweepPolygon): void {
         const edgesUpdates = [];
         for (const edge of this.edges) {
+            if (!(edge.object?.document instanceof WallDocument)) continue;
+            const dataModel = new LimitedAttenuationWallFlagsDataModel(edge.object.document);
+            if (!dataModel.hasLimitedAttenuation || !dataModel.limitedAttenuationRatio) continue;
+            const attenuationRatio = dataModel.limitedAttenuationRatio;
             if (edge.sight !== CONST.WALL_SENSE_TYPES.LIMITED) continue;
             const compute = (point: 'a' | 'b') => {
                 const testPoint = edge[point];
@@ -51,7 +56,7 @@ export default class ClockwiseSweepPolygonPatch {
                 }, edgeOnPath[0]);
                 if (firstEdge.edge.sight !== CONST.WALL_SENSE_TYPES.LIMITED) return;
                 const XRay2 = new foundry.canvas.geometry.Ray(testPoint, firstEdge.intersection);
-                const midPoint = XRay2.project(0.5);
+                const midPoint = XRay2.project(attenuationRatio);
                 return {
                     edge,
                     point,

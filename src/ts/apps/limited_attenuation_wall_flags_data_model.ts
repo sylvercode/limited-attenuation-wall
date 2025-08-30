@@ -37,7 +37,7 @@ export class LimitedAttenuationWallFlagsDataModel extends foundry.abstract.DataM
 
     constructor(wallDocument: WallDocument) {
         super(wallDocument.flags["sylvercode-enhance-limited-wall"]);
-        this.schema.name = "sylvercode-enhance-limited-wall";
+        this.schema.name = MODULE_ID;
         this.schema.parent = wallDocument.schema.fields.flags;
     }
 
