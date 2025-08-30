@@ -51,7 +51,7 @@ async function renderWallConfig(
 
     sightSelect.addEventListener("change", () => {
         const enable = parseInt(sightSelect.value) === CONST.WALL_SENSE_TYPES.LIMITED;
-        fieldset.querySelectorAll('[name^="flags.' + MODULE_ID + '."]').forEach(el => {
+        fieldset.querySelectorAll(`[name^="flags.${MODULE_ID}."]`).forEach(el => {
             (el as HTMLInputElement).disabled = !enable;
         });
     });
