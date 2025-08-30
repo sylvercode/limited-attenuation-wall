@@ -17,19 +17,6 @@ async function renderWallConfig(
     context: ApplicationV2.RenderContextOf<WallConfig>,
     _options: ApplicationV2.RenderOptionsOf<WallConfig>) {
 
-    const dataModel = new LimitedAttenuationWallFlagsDataModel(context.document);
-    const fieldsNames: (keyof LimitedAttenuationWallFlags)[] = [
-        LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation,
-        LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio
-    ];
-    const fields = fieldsNames.map(fieldName => {
-        const field = dataModel.schema.fields[fieldName] as DataField<any, any>;
-        return field.toFormGroup(
-            { rootId: `${context.rootId}-${MODULE_ID}-${fieldName}` },
-            { value: dataModel[fieldName] }
-        );
-    });
-
     const content = element.querySelector(".window-content");
     if (!content) {
         console.error("Could not find .window-content element");
@@ -42,7 +29,30 @@ async function renderWallConfig(
         return;
     }
 
+    const sightSelect = content.querySelector('select[name="sight"]') as HTMLSelectElement;
+    const isSightLimited = parseInt(sightSelect.value) === CONST.WALL_SENSE_TYPES.LIMITED;
+
+    const dataModel = new LimitedAttenuationWallFlagsDataModel(context.document);
+    const fieldNames: (keyof LimitedAttenuationWallFlags)[] = [
+        LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation,
+        LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio
+    ];
+    const fields = fieldNames.map(fieldName => {
+        const field = dataModel.schema.fields[fieldName] as DataField<any, any>;
+        return field.toFormGroup(
+            { rootId: context.rootId },
+            { value: dataModel[fieldName], disabled: !isSightLimited }
+        );
+    });
+
     fields.forEach(field => {
         fieldset.append(field);
+    });
+
+    sightSelect.addEventListener("change", () => {
+        const enable = parseInt(sightSelect.value) === CONST.WALL_SENSE_TYPES.LIMITED;
+        fieldset.querySelectorAll(`[name^="flags.${MODULE_ID}."]`).forEach(el => {
+            (el as HTMLInputElement).disabled = !enable;
+        });
     });
 }
