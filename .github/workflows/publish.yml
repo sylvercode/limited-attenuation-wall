@@ -14,9 +14,9 @@ jobs:
           submodules: true  # Fetch submodules
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version: 22.16
       
       - name: Install dependencies
         run: npm install
