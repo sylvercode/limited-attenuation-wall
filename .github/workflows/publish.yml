@@ -16,8 +16,11 @@ jobs:
         with:
           node-version: 18
 
+      - name: Initialize git submodules
+        run: git submodule update --init --recursive
+      
       - name: Install dependencies
-        run: yarn
+        run: npm install
 
       - name: Extract tag version number
         id: get_version
@@ -28,7 +31,7 @@ jobs:
           MODULE_VERSION: ${{steps.get_version.outputs.version-without-v}}
           GH_PROJECT: ${{github.repository}}
           GH_TAG: ${{github.event.release.tag_name}}
-        run: yarn build
+        run: npm run build
 
       - name: Create zip archive
         working-directory: dist
