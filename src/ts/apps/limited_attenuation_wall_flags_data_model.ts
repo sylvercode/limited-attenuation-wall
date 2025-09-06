@@ -2,6 +2,7 @@ import { HookDefinitions } from "fvtt-hook-attacher";
 import { MODULE_ID, UPPER_MODULE_ID } from "../constants";
 import { BooleanField, DataSchema, NumberField } from "node_modules/fvtt-types/src/foundry/common/data/fields.mjs";
 
+export const LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS = { min: 0.05, max: 0.95, step: 0.05, nullable: true };
 
 class LimitedAttenuationWallFlagNames {
     readonly hasLimitedAttenuation = "hasLimitedAttenuation" as const;
@@ -55,7 +56,7 @@ export class LimitedAttenuationWallFlagsDataModel extends foundry.abstract.DataM
                 { initial: false },
                 { name: LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation }),
             [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: new foundry.data.fields.NumberField(
-                { initial: 0.5, min: 0.1, max: 1, step: 0.1 },
+                LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS,
                 { name: LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio })
         }
     }
