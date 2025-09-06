@@ -1,6 +1,6 @@
 import { HookDefinitions } from "fvtt-hook-attacher";
 import { MODULE_ID, UPPER_MODULE_ID } from "../constants";
-import { BooleanField, DataSchema, NumberField } from "node_modules/fvtt-types/src/foundry/common/data/fields.mjs";
+import { BooleanField, DataSchema, NumberField } from "fvtt-types/src/foundry/common/data/fields.mjs";
 
 export const LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS = { min: 0.05, max: 0.95, step: 0.05, nullable: true };
 

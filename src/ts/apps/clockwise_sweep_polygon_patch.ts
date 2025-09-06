@@ -1,6 +1,6 @@
 import type { LibWrapperBaseCallback, LibWrapperBaseCallbackArgs, LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
 import { LimitedAttenuationWallFlagsDataModel } from "./limited_attenuation_wall_flags_data_model";
-import { Edge } from "node_modules/fvtt-types/src/foundry/client/canvas/geometry/edges/_module.mjs";
+import { Edge } from "fvtt-types/src/foundry/client/canvas/geometry/edges/_module.mjs";
 
 type A_B = 'a' | 'b';
 
