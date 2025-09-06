@@ -13,6 +13,12 @@
           "label": "Limited Attenuation Ratio"
         }
       }
+    },
+    "settings": {
+      "defaultLimitedAttenuationRatio": {
+        "name": "Default Limited Attenuation Ratio",
+        "hint": "The default ratio for limited attenuation walls."
+      }
     }
   }
 }
