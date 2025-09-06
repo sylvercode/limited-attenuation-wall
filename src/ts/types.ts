@@ -6,14 +6,14 @@ import { LimitedAttenuationWallFlagsDataModel } from "./apps/limited_attenuation
 import * as LimitedAttenuationWallSettings from "./apps/limited_attenuation_wall_settings";
 
 
-export interface SylvercodeEnhanceLimitedWallModule
+export interface LimitedAttenuationWallModule
   extends foundry.packages.Module {
 
 }
 
-export type OnInitModuleFunc = (module: SylvercodeEnhanceLimitedWallModule) => void;
+export type OnInitModuleFunc = (module: LimitedAttenuationWallModule) => void;
 
-export class SylvercodeEnhanceLimitedWallModuleHooks {
+export class LimitedAttenuationWallModuleHooks {
   static ON_INIT_MODULE_CALLBACKS: Iterable<OnInitModuleFunc> = [
     LimitedAttenuationWallSettings.onInitHandle
   ];

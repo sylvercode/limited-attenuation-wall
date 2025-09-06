@@ -1,7 +1,7 @@
 {
-  "name": "sylvercode-enhance-limited-wall",
+  "name": "limited-attenuation-wall",
   "version": "1.0.0",
-  "description": "Enhance limited wall vision of Foundry VTT.",
+  "description": "Adds attenuation vision to limited walls of Foundry VTT.",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -16,4 +16,3 @@
     "vite": "^7.0.4"
   }
 }
-
