@@ -3,7 +3,7 @@ import { LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS } from "./limited_attenuation_w
 
 declare module "fvtt-types/configuration" {
     interface SettingConfig {
-        "sylvercode-enhance-limited-wall.defaultLimitedAttenuationRatio": foundry.data.fields.NumberField<typeof LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS>;
+        "limited-attenuation-wall.defaultLimitedAttenuationRatio": foundry.data.fields.NumberField<typeof LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS>;
     }
 }
 

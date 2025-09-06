@@ -1,11 +1,9 @@
 {
-  "id": "sylvercode-enhance-limited-wall",
-  "title": "Sylvercode Enhance Limited Wall",
-  "description": "Enhance limited wall vision of Foundry VTT.",
+  "id": "limited-attenuation-wall",
+  "title": "Limited Attenuation Wall",
+  "description": "Adds attenuation vision to limited walls of Foundry VTT.",
   "version": "0.0.1",
   "packs": [],
-  "system": [],
-  "dependencies": [],
   "scripts": [],
   "compatibility": {
     "minimum": "13",
