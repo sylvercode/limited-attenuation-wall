@@ -1,5 +1,4 @@
 import ClockwiseSweepPolygonPatch from "./apps/clockwise_sweep_polygon_patch";
-import * as dogBrowserApp from "./apps/dog_browser";
 import type { LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
 import { HookDefinitions } from "fvtt-hook-attacher";
 import * as RenderWallConfigPatchApp from "./apps/render_wall_config_patch";
@@ -8,7 +7,7 @@ import * as LimitedAttenuationWallSettings from "./apps/limited_attenuation_wall
 
 
 export interface SylvercodeEnhanceLimitedWallModule
-  extends foundry.packages.Module, dogBrowserApp.DogBrowserHandle {
+  extends foundry.packages.Module {
 
 }
 
@@ -16,7 +15,6 @@ export type OnInitModuleFunc = (module: SylvercodeEnhanceLimitedWallModule) => v
 
 export class SylvercodeEnhanceLimitedWallModuleHooks {
   static ON_INIT_MODULE_CALLBACKS: Iterable<OnInitModuleFunc> = [
-    dogBrowserApp.onInitHandle,
     LimitedAttenuationWallSettings.onInitHandle
   ];
 
@@ -25,7 +23,6 @@ export class SylvercodeEnhanceLimitedWallModuleHooks {
   ];
 
   static HOOKS_DEFINITIONS_SET: HookDefinitions[] = [
-    dogBrowserApp.HOOKS_DEFINITIONS,
     ...LimitedAttenuationWallFlagsDataModel.HOOKS_DEFINITIONS,
     ...RenderWallConfigPatchApp.HOOKS_DEFINITIONS,
   ]
