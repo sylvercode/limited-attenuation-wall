@@ -1,9 +1,5 @@
 {
   "SYLVERCODE-ENHANCE-LIMITED-WALL": {
-    "dog-browser": "Dog browser",
-    "dogs": "Dogs",
-    "fetch-random-dog": "Fetch random dog photo",
-    "random-dog-alt": "Image of a random dog",
     "LimitedAttenuationWallFlags": {
       "FIELDS": {
         "hasLimitedAttenuation": {
