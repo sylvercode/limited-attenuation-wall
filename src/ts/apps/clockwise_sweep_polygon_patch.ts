@@ -4,6 +4,9 @@ import type { LibWrapperBaseCallback, LibWrapperBaseCallbackArgs, LibWrapperWrap
 import type { Edge } from "fvtt-types/src/foundry/client/canvas/geometry/edges/_module.mjs";
 import type { IPointData } from "fvtt-types/src/types/augments/pixi.mjs";
 
+/**
+ * LibWrapper patch definitions for ClockwiseSweepPolygon edge identification.
+ */
 export const LIBWRAPPER_PATCHS: Iterable<LibWrapperWrapperDefinitions> = [
     {
         target: "foundry.canvas.geometry.ClockwiseSweepPolygon.prototype._identifyEdges",
@@ -13,11 +16,11 @@ export const LIBWRAPPER_PATCHS: Iterable<LibWrapperWrapperDefinitions> = [
 ];
 
 /**
- * 
+ * Wrapper for the _identifyEdges method to inject custom edge identification logic.
  * @param this The ClockwiseSweepPolygon instance
  * @param wrapped The base wrapped function
  * @param args The arguments of the wrapped function
- * @returns the result of the wrapped function
+ * @returns The result of the wrapped function
  */
 function identifyEdges_Wrapper(this: ClockwiseSweepPolygon, wrapped: LibWrapperBaseCallback, ...args: LibWrapperBaseCallbackArgs): any {
     const result = wrapped.apply(this, args);
@@ -25,10 +28,19 @@ function identifyEdges_Wrapper(this: ClockwiseSweepPolygon, wrapped: LibWrapperB
     return result;
 }
 
+/**
+ * The two sides of an edge.
+ */
 type EdgeSides = 'a' | 'b';
 
+/**
+ * Array of edge sides for iteration.
+ */
 const EdgeSides: EdgeSides[] = ['a', 'b'];
 
+/**
+ * Information about an edge update, including new point and affected edge points.
+ */
 type EdgeUpdateInfo = {
     newPoint: IPointData | null,
     edgePoints: {
@@ -37,8 +49,15 @@ type EdgeUpdateInfo = {
     }[],
 }
 
+/**
+ * Content type for working areas: array of edges and their limited attenuation ratios.
+ */
 type WorkingAreaContent = { edge: Edge, limitedAttenuationRatio: number | null }[];
 
+/**
+ * Identifies and updates edges for a ClockwiseSweepPolygon instance.
+ * @param csp The ClockwiseSweepPolygon instance.
+ */
 function identifyEdges(csp: ClockwiseSweepPolygon): void {
     const updatesInfo = new Map<number, EdgeUpdateInfo>;
     const workingAreaContent = orderLimitedEdgesFarestToClosest(csp.origin, csp.edges, csp.config.type);
@@ -47,7 +66,7 @@ function identifyEdges(csp: ClockwiseSweepPolygon): void {
         return;
 
     const workingAreaCache = new WorkingAreaCache<WorkingAreaContent>(workingAreaContent, filterWorkingAreaEdges);
-    for (const { edge, limitedAttenuationRatio } of workingAreaContent) {
+    for (const { edge } of workingAreaContent) {
         const workingArea = workingAreaCache.createWorkingArea(csp.origin, edge.a, edge.b);
 
         EdgeSides.forEach((side) => {
@@ -61,16 +80,13 @@ function identifyEdges(csp: ClockwiseSweepPolygon): void {
                 return;
             }
 
-            const newPointUpdate = { newPoint: null, edgePoints: [] } as EdgeUpdateInfo;
-            updatesInfo.set(pointKey, newPointUpdate);
-
             const newPoint = calcNewPoint(csp.origin, point, workingArea);
-            if (newPoint) {
-                newPointUpdate.newPoint = newPoint;
-                newPointUpdate.edgePoints.push({ edge, side });
-            }
+            if (newPoint)
+                updatesInfo.set(pointKey, { newPoint, edgePoints: [{ edge, side }] });
+            else
+                updatesInfo.set(pointKey, { newPoint: null, edgePoints: [] });
         });
-    }
+    };
 
     for (const { newPoint, edgePoints } of updatesInfo.values()) {
         if (!newPoint)
@@ -82,6 +98,11 @@ function identifyEdges(csp: ClockwiseSweepPolygon): void {
     }
 }
 
+/**
+ * Gets the limited attenuation ratio for an edge, if present.
+ * @param edge The edge to check.
+ * @returns The limited attenuation ratio or null.
+ */
 function getLimitedAttenuationRatio(edge: Edge): number | null {
     if (!(edge.object?.document instanceof WallDocument))
         return null;
@@ -92,6 +113,12 @@ function getLimitedAttenuationRatio(edge: Edge): number | null {
         : null;
 }
 
+/**
+ * Gets the restriction type for an edge.
+ * @param type The polygon type.
+ * @param edge The edge to check.
+ * @returns The wall sense type restriction.
+ */
 function getEdgeRestriction(type: PointSourcePolygon.PolygonType, edge: Edge): CONST.WALL_SENSE_TYPES {
     const restriction = (edge as any)[type];
     if (typeof restriction === undefined) {
@@ -100,9 +127,15 @@ function getEdgeRestriction(type: PointSourcePolygon.PolygonType, edge: Edge): C
     return restriction;
 }
 
-const filterWorkingAreaEdges: ContentEvaluator<WorkingAreaContent> = (rect, wac) => {
+/**
+ * Filters edges in a working area based on intersection and limited attenuation.
+ * @param rect The rectangle to test against.
+ * @param parentContent The parent working area's content.
+ * @returns Filtered working area content.
+ */
+function filterWorkingAreaEdges(rect: PIXI.Rectangle, parentContent: WorkingAreaContent): WorkingAreaContent {
     let hasLimitedAttenuationWalls = true;
-    const filteredEdges = wac.filter((element) => {
+    const filteredEdges = parentContent.filter((element) => {
         if (!hasLimitedAttenuationWalls) {
             hasLimitedAttenuationWalls = element.limitedAttenuationRatio !== null;
         }
@@ -115,10 +148,24 @@ const filterWorkingAreaEdges: ContentEvaluator<WorkingAreaContent> = (rect, wac)
     return filteredEdges;
 }
 
+/**
+ * Calculates the squared distance between two points.
+ * @param pt1 First point.
+ * @param pt2 Second point.
+ * @returns Squared distance.
+ */
 function calcSquaredDistance(pt1: Canvas.Point, pt2: Canvas.Point): number {
     return (pt1.x - pt2.x) ** 2 + (pt1.y - pt2.y) ** 2;
 }
 
+/**
+ * Orders limited edges from farthest to closest to the origin. 
+ * Also checks for limited attenuation walls presence. If none are found, returns an empty array.
+ * @param origin The origin point.
+ * @param edges The set of edges.
+ * @param type The polygon type.
+ * @returns Ordered working area content. Or empty array if no limited attenuation walls are present.
+ */
 function orderLimitedEdgesFarestToClosest(origin: Canvas.Point, edges: Set<Edge>, type: PointSourcePolygon.PolygonType): WorkingAreaContent {
     let hasLimitedAttenuationWalls = false;
     const workingAreaContent = Array.from(edges.filter(edge => {
@@ -156,6 +203,13 @@ function orderLimitedEdgesFarestToClosest(origin: Canvas.Point, edges: Set<Edge>
     });
 }
 
+/**
+ * Calculates a new point for an edge based on limited attenuation intersections.
+ * @param origin The origin point.
+ * @param point The point to project from.
+ * @param workingArea The working area containing edges.
+ * @returns The new projected point or null.
+ */
 function calcNewPoint(origin: Canvas.Point, point: Canvas.Point, workingArea: WorkingArea<WorkingAreaContent>): IPointData | null {
     const XRay = new foundry.canvas.geometry.Ray(origin, point);
     const edgeOnPath = [];
