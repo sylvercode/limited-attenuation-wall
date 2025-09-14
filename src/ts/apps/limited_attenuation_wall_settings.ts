@@ -7,14 +7,23 @@ declare module "fvtt-types/configuration" {
     }
 }
 
+/**
+ * Enum for setting names used in the Limited Attenuation Wall module.
+ */
 enum LimitedAttenuationWallSettingNames {
     DefaultLimitedAttenuationRatio = "defaultLimitedAttenuationRatio"
 }
 
+/**
+ * Enum for default values of settings in the Limited Attenuation Wall module.
+ */
 export enum LimitedAttenuationWallSettingDefaults {
     DefaultLimitedAttenuationRatio = 0.5
 }
 
+/**
+ * Registers the settings for the Limited Attenuation Wall module.
+ */
 function registerLimitedAttenuationWallSettings() {
     if (!game.settings) throw new Error("Game settings not initialized");
     if (!game.i18n) throw new Error("Game i18n not initialized");
@@ -30,15 +39,29 @@ function registerLimitedAttenuationWallSettings() {
     });
 }
 
+/**
+ * onInit callback for registering module settings.
+ */
 export const onInitHandle = registerLimitedAttenuationWallSettings;
 
+/**
+ * Class for accessing Limited Attenuation Wall settings.
+ */
 class LimitedAttenuationWallSetting {
 
+    /**
+     * Gets the default limited attenuation ratio from settings.
+     * @returns {number} The default limited attenuation ratio.
+     */
     defaultLimitedAttenuationRatio(): number {
-        if (!game.settings) throw new Error("Game settings not initialized");
+        if (!game.settings)
+            throw new Error("Game settings not initialized");
 
         return game.settings.get(MODULE_ID, LimitedAttenuationWallSettingNames.DefaultLimitedAttenuationRatio) ?? LimitedAttenuationWallSettingDefaults.DefaultLimitedAttenuationRatio;
     }
 }
 
+/**
+ * Singleton instance for accessing Limited Attenuation Wall settings.
+ */
 export const limitedAttenuationWallSettings = new LimitedAttenuationWallSetting();
