@@ -1,9 +1,9 @@
-import { HookDefinitions } from "fvtt-hook-attacher";
-import ApplicationV2 from "fvtt-types/src/foundry/client/applications/api/application.mjs";
 import { MODULE_ID } from "../constants";
-import { DataField } from "fvtt-types/src/foundry/common/data/fields.mjs";
 import { LimitedAttenuationWallFlags, LimitedAttenuationWallFlagsDataModel, LIMITED_ATTENUATION_WALL_FLAG_NAMES } from "./limited_attenuation_wall_flags_data_model";
 import { limitedAttenuationWallSettings } from "./limited_attenuation_wall_settings";
+import { HookDefinitions } from "fvtt-hook-attacher";
+import type ApplicationV2 from "fvtt-types/src/foundry/client/applications/api/application.mjs";
+import type { DataField } from "fvtt-types/src/foundry/common/data/fields.mjs";
 
 export const HOOKS_DEFINITIONS: Iterable<HookDefinitions> = [{
     on: [{
