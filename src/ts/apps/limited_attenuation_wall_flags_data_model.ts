@@ -2,18 +2,26 @@ import { HookDefinitions } from "fvtt-hook-attacher";
 import { MODULE_ID, UPPER_MODULE_ID } from "../constants";
 import type { BooleanField, DataSchema, NumberField } from "fvtt-types/src/foundry/common/data/fields.mjs";
 
+
+/**
+ * Options for the limited attenuation ratio number field.
+ */
 export const LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS = { min: 0.05, max: 0.95, step: 0.05, nullable: true };
 
-class LimitedAttenuationWallFlagNames {
-    readonly hasLimitedAttenuation = "hasLimitedAttenuation" as const;
-    readonly limitedAttenuationRatio = "limitedAttenuationRatio" as const;
+/**
+ * Enum of the names of the wall flags used for limited attenuation.
+ */
+export enum LimitedAttenuationWallFlagNames {
+    hasLimitedAttenuation = "hasLimitedAttenuation",
+    limitedAttenuationRatio = "limitedAttenuationRatio"
 }
 
-export const LIMITED_ATTENUATION_WALL_FLAG_NAMES = new LimitedAttenuationWallFlagNames();
-
+/**
+ * Interface for the wall flags used by the Limited Attenuation Wall module.
+ */
 export interface LimitedAttenuationWallFlags {
-    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation]: boolean
-    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: number
+    [LimitedAttenuationWallFlagNames.hasLimitedAttenuation]: boolean
+    [LimitedAttenuationWallFlagNames.limitedAttenuationRatio]: number
 };
 
 declare module "fvtt-types/configuration" {
@@ -25,39 +33,57 @@ declare module "fvtt-types/configuration" {
 }
 
 interface LimitedAttenuationFlagsSchema extends DataSchema {
-    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation]: BooleanField,
-    [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: NumberField
+    [LimitedAttenuationWallFlagNames.hasLimitedAttenuation]: BooleanField,
+    [LimitedAttenuationWallFlagNames.limitedAttenuationRatio]: NumberField
 }
 
+/**
+ * Data model for the limited attenuation wall flags, including schema and hooks.
+ */
 export class LimitedAttenuationWallFlagsDataModel extends foundry.abstract.DataModel<LimitedAttenuationFlagsSchema> {
-
-    static readonly HOOKS_DEFINITIONS: Iterable<HookDefinitions> = [{
-        on: [{
-            name: "i18nInit",
-            callback: LimitedAttenuationWallFlagsDataModel.i18nInit
-        }]
-    }];
-
+    /**
+     * @inheritdoc
+     */
     static override LOCALIZATION_PREFIXES = [`${UPPER_MODULE_ID}.LimitedAttenuationWallFlags`];
 
+    /**
+     * @inheritdoc
+     */
     static i18nInit() {
         foundry.helpers.Localization.localizeDataModel(LimitedAttenuationWallFlagsDataModel);
     }
 
+    /**
+     * Constructs a new LimitedAttenuationWallFlagsDataModel for a given wall document.
+     * @param wallDocument The wall document to use for the data model.
+     */
     constructor(wallDocument: WallDocument) {
         super(wallDocument.flags[MODULE_ID]);
         this.schema.name = MODULE_ID;
         this.schema.parent = wallDocument.schema.fields.flags;
     }
 
+    /**
+     * @inheritdoc
+     */
     static override defineSchema() {
         return {
-            [LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation]: new foundry.data.fields.BooleanField(
+            [LimitedAttenuationWallFlagNames.hasLimitedAttenuation]: new foundry.data.fields.BooleanField(
                 { initial: false },
-                { name: LIMITED_ATTENUATION_WALL_FLAG_NAMES.hasLimitedAttenuation }),
-            [LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio]: new foundry.data.fields.NumberField(
+                { name: LimitedAttenuationWallFlagNames.hasLimitedAttenuation }),
+            [LimitedAttenuationWallFlagNames.limitedAttenuationRatio]: new foundry.data.fields.NumberField(
                 LIMITED_ATTENUATION_RATIO_FIELD_OPTIONS,
-                { name: LIMITED_ATTENUATION_WALL_FLAG_NAMES.limitedAttenuationRatio })
+                { name: LimitedAttenuationWallFlagNames.limitedAttenuationRatio })
         }
     }
 }
+
+/**
+ * Iterable of hook definitions for this data model.
+ */
+export const HOOKS_DEFINITIONS: Iterable<HookDefinitions> = [{
+    on: [{
+        name: "i18nInit",
+        callback: LimitedAttenuationWallFlagsDataModel.i18nInit
+    }]
+}];
