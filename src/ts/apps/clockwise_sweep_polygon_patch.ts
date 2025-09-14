@@ -1,8 +1,9 @@
-import { WorkingAreaCache, ContentEvaluator, WorkingArea } from "../utils/working_area_cache";
+import { WorkingAreaCache, WorkingArea } from "../utils/working_area_cache";
 import { LimitedAttenuationWallFlagsDataModel } from "./limited_attenuation_wall_flags_data_model";
 import type { LibWrapperBaseCallback, LibWrapperBaseCallbackArgs, LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
 import type { Edge } from "fvtt-types/src/foundry/client/canvas/geometry/edges/_module.mjs";
 import type { IPointData } from "fvtt-types/src/types/augments/pixi.mjs";
+import type { LineIntersection } from "fvtt-types/src/foundry/common/utils/geometry.mjs";
 
 /**
  * LibWrapper patch definitions for ClockwiseSweepPolygon edge identification.
@@ -121,7 +122,7 @@ function getLimitedAttenuationRatio(edge: Edge): number | null {
  */
 function getEdgeRestriction(type: PointSourcePolygon.PolygonType, edge: Edge): CONST.WALL_SENSE_TYPES {
     const restriction = (edge as any)[type];
-    if (typeof restriction === undefined) {
+    if (restriction === undefined) {
         return CONST.WALL_SENSE_TYPES.NONE;
     }
     return restriction;
@@ -192,9 +193,6 @@ function orderLimitedEdgesFarestToClosest(origin: Canvas.Point, edges: Set<Edge>
         return { ...wac, distances };
     });
 
-    if (!hasLimitedAttenuationWalls)
-        return [];
-
     return workingAreaContentWithSquaredDistances.sort((a, b) => {
         const bigDiff = b.distances.big - a.distances.big;
         if (bigDiff)
@@ -212,7 +210,7 @@ function orderLimitedEdgesFarestToClosest(origin: Canvas.Point, edges: Set<Edge>
  */
 function calcNewPoint(origin: Canvas.Point, point: Canvas.Point, workingArea: WorkingArea<WorkingAreaContent>): IPointData | null {
     const XRay = new foundry.canvas.geometry.Ray(origin, point);
-    const edgeOnPath = [];
+    const edgeOnPath: { edge: Edge; limitedAttenuationRatio: number | null; intersection: LineIntersection }[] = [];
     for (const { edge, limitedAttenuationRatio } of workingArea.getContent()) {
 
         if (EdgeSides.some((side) => {
@@ -236,7 +234,7 @@ function calcNewPoint(origin: Canvas.Point, point: Canvas.Point, workingArea: Wo
 
     const firstEdge = edgeOnPath.reduce((max, curr) => {
         return (curr.intersection.t0 > max.intersection.t0) ? curr : max;
-    }, edgeOnPath[0]);
+    });
 
     if (firstEdge.limitedAttenuationRatio === null)
         return null;

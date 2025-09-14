@@ -118,11 +118,9 @@ export class WorkingAreaCache<T> {
     }
 
     /**
-     * Logs the levels of all cached areas, ordered by level descending.
+     * Returns the cached areas, ordered by level descending.
      */
-    traceLevels(): void {
-        for (const area of this.areaOrderedBySurfaceArea.map(a => a.area).sort((a, b) => b.level() - a.level())) {
-            console.log(`Level ${area.level()}`, area);
-        }
+    areasByLevel(): WorkingArea<T>[] {
+        return this.areaOrderedBySurfaceArea.map(a => a.area).sort((a, b) => b.level() - a.level());
     }
 }
