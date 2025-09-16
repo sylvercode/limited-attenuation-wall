@@ -4,7 +4,7 @@ Adds attenuation vision to limited walls of Foundry VTT.
 
 Foundry always shows the entire area delimited by limited walls. The added attenuation changes the visible area to only a portion near the token, so the other side is not revealed.
 
-![example](doc/assets/exemple.gif)
+![exemple](https://github.com/user-attachments/assets/e9d0deaf-05ec-4165-83e5-6e04f3181a1a)
 
 ## Configuration
 
