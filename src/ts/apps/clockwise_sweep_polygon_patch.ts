@@ -1,7 +1,11 @@
-import { WorkingAreaCache, WorkingArea } from "../utils/working_area_cache";
+import { WorkingAreaCache } from "../utils/working_area_cache";
+import type { WorkingArea } from "../utils/working_area";
 import { LimitedAttenuationWallFlagsDataModel } from "./limited_attenuation_wall_flags_data_model";
 import type { LibWrapperBaseCallback, LibWrapperBaseCallbackArgs, LibWrapperWrapperDefinitions } from "fvtt-lib-wrapper-types";
 import type { Edge } from "fvtt-types/src/foundry/client/canvas/geometry/edges/_module.mjs";
+import type ClockwiseSweepPolygon from "fvtt-types/src/foundry/client/canvas/geometry/clockwise-sweep.mjs";
+import type PointSourcePolygon from "fvtt-types/src/foundry/client/canvas/geometry/shapes/source-polygon.mjs";
+import type WallDocument from "fvtt-types/src/foundry/client/documents/wall.mjs";
 import type { IPointData } from "fvtt-types/src/types/augments/pixi.mjs";
 import type { LineIntersection } from "fvtt-types/src/foundry/common/utils/geometry.mjs";
 
@@ -37,7 +41,7 @@ type EdgeSides = 'a' | 'b';
 /**
  * Array of edge sides for iteration.
  */
-const EdgeSides: EdgeSides[] = ['a', 'b'];
+const EDGE_SIDES: EdgeSides[] = ['a', 'b'];
 
 /**
  * Information about an edge update, including new point and affected edge points.
@@ -60,17 +64,21 @@ type WorkingAreaContent = { edge: Edge, limitedAttenuationRatio: number | null }
  * @param csp The ClockwiseSweepPolygon instance.
  */
 function identifyEdges(csp: ClockwiseSweepPolygon): void {
+    const origin = csp.origin;
+    if (!origin)
+        return;
+
     const updatesInfo = new Map<number, EdgeUpdateInfo>;
-    const workingAreaContent = orderLimitedEdgesFarestToClosest(csp.origin, csp.edges, csp.config.type);
+    const workingAreaContent = orderLimitedEdgesFarestToClosest(origin, csp.edges, csp.config.type);
 
     if (workingAreaContent.length === 0)
         return;
 
     const workingAreaCache = new WorkingAreaCache<WorkingAreaContent>(workingAreaContent, filterWorkingAreaEdges);
     for (const { edge } of workingAreaContent) {
-        const workingArea = workingAreaCache.createWorkingArea(csp.origin, edge.a, edge.b);
+        const workingArea = workingAreaCache.createWorkingArea(origin, edge.a, edge.b);
 
-        EdgeSides.forEach((side) => {
+        EDGE_SIDES.forEach((side) => {
             const point = edge[side];
 
             const pointKey = foundry.canvas.geometry.edges.PolygonVertex.getKey(point.x, point.y);
@@ -81,7 +89,7 @@ function identifyEdges(csp: ClockwiseSweepPolygon): void {
                 return;
             }
 
-            const newPoint = calcNewPoint(csp.origin, point, workingArea);
+            const newPoint = calcNewPoint(origin, point, workingArea);
             if (newPoint)
                 updatesInfo.set(pointKey, { newPoint, edgePoints: [{ edge, side }] });
             else
@@ -105,10 +113,11 @@ function identifyEdges(csp: ClockwiseSweepPolygon): void {
  * @returns The limited attenuation ratio or null.
  */
 function getLimitedAttenuationRatio(edge: Edge): number | null {
-    if (!(edge.object?.document instanceof WallDocument))
+    const wallDocument = edge.object?.document;
+    if (!wallDocument || wallDocument.documentName !== "Wall")
         return null;
 
-    const dataModel = new LimitedAttenuationWallFlagsDataModel(edge.object.document);
+    const dataModel = new LimitedAttenuationWallFlagsDataModel(wallDocument as WallDocument);
     return dataModel.hasLimitedAttenuation && dataModel.limitedAttenuationRatio !== undefined
         ? dataModel.limitedAttenuationRatio
         : null;
@@ -213,7 +222,7 @@ function calcNewPoint(origin: Canvas.Point, point: Canvas.Point, workingArea: Wo
     const edgeOnPath: { edge: Edge; limitedAttenuationRatio: number | null; intersection: LineIntersection }[] = [];
     for (const { edge, limitedAttenuationRatio } of workingArea.getContent()) {
 
-        if (EdgeSides.some((side) => {
+        if (EDGE_SIDES.some((side) => {
             return edge[side].x === point.x && edge[side].y === point.y;
         }))
             continue;

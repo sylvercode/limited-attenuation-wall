@@ -1,8 +1,9 @@
 import { MODULE_ID } from "../constants";
-import { LimitedAttenuationWallFlags, LimitedAttenuationWallFlagsDataModel, LimitedAttenuationWallFlagNames } from "./limited_attenuation_wall_flags_data_model";
+import { LimitedAttenuationWallFlagsDataModel, LimitedAttenuationWallFlagNames, type LimitedAttenuationWallFlags } from "./limited_attenuation_wall_flags_data_model";
 import { limitedAttenuationWallSettings } from "./limited_attenuation_wall_settings";
-import { HookDefinitions } from "fvtt-hook-attacher";
+import type { HookDefinitions } from "fvtt-hook-attacher";
 import type ApplicationV2 from "fvtt-types/src/foundry/client/applications/api/application.mjs";
+import type WallConfig from "fvtt-types/src/foundry/client/applications/sheets/wall-config.mjs";
 import type { DataField } from "fvtt-types/src/foundry/common/data/fields.mjs";
 
 /**
@@ -23,10 +24,12 @@ export const HOOKS_DEFINITIONS: Iterable<HookDefinitions> = [{
  * @param options The render options for the application.
  */
 async function renderWallConfig(
-    _application: WallConfig,
+    application: WallConfig,
     element: HTMLElement,
     context: ApplicationV2.RenderContextOf<WallConfig>,
-    _options: ApplicationV2.RenderOptionsOf<WallConfig>) {
+    options: ApplicationV2.RenderOptionsOf<WallConfig>) {
+    void application;
+    void options;
 
     const content = element.querySelector(".window-content");
     if (!content) {

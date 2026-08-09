@@ -1,6 +1,5 @@
-import { WorkingArea, MasterWorkingArea, ContentEvaluator, SubWorkingArea } from "./working_area";
-
-export type { ContentEvaluator, WorkingArea } from "./working_area";
+import { MasterWorkingArea, SubWorkingArea } from "./working_area";
+import type { ContentEvaluator, WorkingArea } from "./working_area";
 
 /**
  * Caches and manages hierarchical working areas for a given content type.

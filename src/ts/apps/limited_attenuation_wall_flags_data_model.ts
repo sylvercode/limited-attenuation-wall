@@ -1,4 +1,4 @@
-import { HookDefinitions } from "fvtt-hook-attacher";
+import type { HookDefinitions } from "fvtt-hook-attacher";
 import { MODULE_ID, UPPER_MODULE_ID } from "../constants";
 import type { BooleanField, DataSchema, NumberField } from "fvtt-types/src/foundry/common/data/fields.mjs";
 

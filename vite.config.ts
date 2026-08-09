@@ -1,7 +1,7 @@
 import path from "node:path";
 import * as fsPromises from "fs/promises";
 import copy from "rollup-plugin-copy";
-import { defineConfig, Plugin } from "vite";
+import { defineConfig } from "vite";
 
 const moduleVersion = process.env.MODULE_VERSION;
 const githubProject = process.env.GH_PROJECT;
