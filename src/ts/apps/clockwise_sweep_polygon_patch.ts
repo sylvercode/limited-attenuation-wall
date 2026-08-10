@@ -129,10 +129,10 @@ function getLimitedAttenuationRatio(edge: Edge): number | null {
  * @param edge The edge to check.
  * @returns The wall sense type restriction.
  */
-function getEdgeRestriction(type: PointSourcePolygon.PolygonType, edge: Edge): CONST.WALL_SENSE_TYPES {
+function getEdgeRestriction(type: PointSourcePolygon.PolygonType, edge: Edge): CONST.EDGE_SENSE_TYPES {
     const restriction = (edge as any)[type];
     if (restriction === undefined) {
-        return CONST.WALL_SENSE_TYPES.NONE;
+        return CONST.EDGE_SENSE_TYPES.NONE;
     }
     return restriction;
 }
@@ -179,7 +179,7 @@ function calcSquaredDistance(pt1: Canvas.Point, pt2: Canvas.Point): number {
 function orderLimitedEdgesFarestToClosest(origin: Canvas.Point, edges: Set<Edge>, type: PointSourcePolygon.PolygonType): WorkingAreaContent {
     let hasLimitedAttenuationWalls = false;
     const workingAreaContent = Array.from(edges.filter(edge => {
-        const isLimited = getEdgeRestriction(type, edge) === CONST.WALL_SENSE_TYPES.LIMITED;
+        const isLimited = getEdgeRestriction(type, edge) === CONST.EDGE_SENSE_TYPES.LIMITED;
 
         if (isLimited && !hasLimitedAttenuationWalls) {
             hasLimitedAttenuationWalls = getLimitedAttenuationRatio(edge) !== null;

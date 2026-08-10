@@ -45,12 +45,12 @@ async function renderWallConfig(
 
     const sightSelect = content.querySelector('select[name="sight"]') as HTMLSelectElement;
     sightSelect.addEventListener("change", () => {
-        const enable = parseInt(sightSelect.value) === CONST.WALL_SENSE_TYPES.LIMITED;
+        const enable = parseInt(sightSelect.value) === CONST.EDGE_SENSE_TYPES.LIMITED;
         fieldset.querySelectorAll(`[name^="flags.${MODULE_ID}."]`).forEach(el => {
             (el as HTMLInputElement).disabled = !enable;
         });
     });
-    const isSightLimited = parseInt(sightSelect.value) === CONST.WALL_SENSE_TYPES.LIMITED;
+    const isSightLimited = parseInt(sightSelect.value) === CONST.EDGE_SENSE_TYPES.LIMITED;
 
     const dataModel = new LimitedAttenuationWallFlagsDataModel(context.document);
 
