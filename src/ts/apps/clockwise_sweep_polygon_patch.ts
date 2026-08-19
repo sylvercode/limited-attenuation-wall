@@ -113,7 +113,17 @@ function identifyEdges(csp: ClockwiseSweepPolygon): void {
  * @returns The limited attenuation ratio or null.
  */
 function getLimitedAttenuationRatio(edge: Edge): number | null {
-    const wallDocument = edge.object?.document;
+    const wallDocument = (() => {
+        const source = edge.object;
+        if (!source)
+            return null;
+
+        if ("document" in source)
+            return source.document;
+        if ("documentName" in source)
+            return source;
+        return null;
+    })();
     if (!wallDocument || wallDocument.documentName !== "Wall")
         return null;
 
@@ -177,6 +187,8 @@ function calcSquaredDistance(pt1: Canvas.Point, pt2: Canvas.Point): number {
  * @returns Ordered working area content. Or empty array if no limited attenuation walls are present.
  */
 function orderLimitedEdgesFarestToClosest(origin: Canvas.Point, edges: Set<Edge>, type: PointSourcePolygon.PolygonType): WorkingAreaContent {
+    if (type === "move")
+        return [];
     let hasLimitedAttenuationWalls = false;
     const workingAreaContent = Array.from(edges.filter(edge => {
         const isLimited = getEdgeRestriction(type, edge) === CONST.EDGE_SENSE_TYPES.LIMITED;
