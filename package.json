@@ -1,6 +1,6 @@
 {
   "name": "limited-attenuation-wall",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Adds attenuation vision to limited walls of Foundry VTT.",
   "license": "MIT",
   "type": "module",

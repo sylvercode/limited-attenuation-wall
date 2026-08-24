@@ -2,7 +2,7 @@
   "id": "limited-attenuation-wall",
   "title": "Limited Attenuation Wall",
   "description": "Adds attenuation vision to limited walls of Foundry VTT.",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "url": "https://github.com/sylvercode/limited-attenuation-wall",
   "license": "https://github.com/sylvercode/limited-attenuation-wall/blob/main/LICENSE",
   "readme": "https://github.com/sylvercode/limited-attenuation-wall/blob/main/README.md",
@@ -12,7 +12,7 @@
   "scripts": [],
   "compatibility": {
     "minimum": "13",
-    "verified": "13"
+    "verified": "14.367"
   },
   "authors": [
     {
@@ -31,7 +31,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.0.0.0",
-          "verified": "1.12.6.0"
+          "verified": "1.13.51.0"
         }
       }
     ]
