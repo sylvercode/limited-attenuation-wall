@@ -34,8 +34,7 @@ function registerLimitedAttenuationWallSettings() {
         hint: game.i18n.localize(`${UPPER_MODULE_ID}.settings.${LimitedAttenuationWallSettingNames.DefaultLimitedAttenuationRatio}.hint`),
         scope: "world",
         config: true,
-        type: new foundry.data.fields.NumberField(defaultRatioFieldOptions),
-        input: (field, config) => field.toInput(config)
+        type: new foundry.data.fields.NumberField(defaultRatioFieldOptions)
     });
 }
 
