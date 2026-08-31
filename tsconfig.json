@@ -7,11 +7,20 @@
       "fvtt-hook-attacher": [
         "./libs/fvtt-hook-attacher/index"
       ],
+      "fvtt-hook-attacher/*": [
+        "./libs/fvtt-hook-attacher/*"
+      ],
       "fvtt-types/configuration": [
         "./node_modules/@league-of-foundry-developers/foundry-vtt-types/src/configuration/index.mjs"
       ],
+      "fvtt-types/utils": [
+        "./node_modules/@league-of-foundry-developers/foundry-vtt-types/src/utils/index.d.mts"
+      ],
+      "fvtt-types/src/*": [
+        "./node_modules/@league-of-foundry-developers/foundry-vtt-types/src/*"
+      ],
       "fvtt-types/*": [
-        "./node_modules/@league-of-foundry-developers/foundry-vtt-types/*"
+        "./node_modules/@league-of-foundry-developers/foundry-vtt-types/src/*"
       ]
     },
     "types": [
@@ -43,5 +52,10 @@
   "include": [
     "src",
     "libs"
+  ],
+  "exclude": [
+    "dist",
+    "foundry",
+    "node_modules"
   ]
 }
